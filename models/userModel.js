@@ -1,6 +1,6 @@
 const { v4 } = require("uuid");
 const fs = require("fs");
-const FILE_PATH = require("path").join(__dirname, "users.json");
+const FILE_PATH = require("path").join(__dirname, "..", "data", "users.json");
 
 function findUsers() {
 
@@ -27,8 +27,11 @@ function updateUser(id, user, overwrite) {
 
     if (index === -1) return {};
 
-    if (overwrite)
+    if (overwrite) {
+        user.id = users[index].id
         users[index] = user;
+    }
+
     else {
         for (let key in user) {
             users[index][key] = user[key];

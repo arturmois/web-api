@@ -1,40 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const db = require("../db");
+const userController = require('../controllers/userController');
+const validationMiddleware = require("../middlewares/validationMiddleware");
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.json(db.findUsers());
-});
+router.get('/', userController.getUsers);
 
+router.get('/:id', userController.getUserById);
 
-router.get('/:id', (req, res) => {
-  const id = req.params.id;
-  res.json(db.findUser(id));
-});
+router.post('/', validationMiddleware, userController.postUser);
 
-router.post('/', (req, res) => {
-  const user = db.insertUser(req.body);
-  res.status(201).json(user);
-});
+router.put('/:id', validationMiddleware, userController.putUser);
 
-router.put('/:id', (req, res) => {
-  const id = req.params.id;
-  const user = db.updateUser(id, req.body, true);
-  res.status(200).json(user);
+router.patch('/:id', validationMiddleware, userController.patchUser);
 
-});
-
-router.patch('/:id', (req, res) => {
-  const id = req.params.id;
-  const user = db.updateUser(id, req.body, false);
-  res.status(200).json(user);
-})
-
-router.delete('/:id', (req, res) => {
-  const id = req.params.id;
-  const user = db.deleteUser(id);
-  res.status(200).json(user);
-})
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;
